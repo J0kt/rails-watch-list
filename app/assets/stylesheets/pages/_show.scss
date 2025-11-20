@@ -1,0 +1,21 @@
+.hover-opacity-100 {
+  transition: 0.3s;
+  &:hover { opacity: 1 !important; }
+}
+
+.text-truncate-multiline {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+}
+
+.hover-danger:hover {
+  color: #dc3545 !important;
+  text-decoration: underline !important;
+}
+
+.border-dashed {
+  border-style: dashed !important;
+}
