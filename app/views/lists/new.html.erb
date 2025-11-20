@@ -1,14 +1,30 @@
-<div class="container mt-3">
-  <h1>Créer une nouvelle liste</h1>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-6">
 
-  <div class="row">
-    <div class="col-6">
-      <%= simple_form_for(@list) do |f| %>
-        <%= f.input :name, label: "Nom de la liste", placeholder: "Classiques, Horreur, Comédies..." %>
-        <%= f.input :photo, as: :file %>
-        <%= f.submit "Créer", class: "btn btn-primary" %>
-        <%= link_to "Annuler", lists_path, class: "btn btn-outline-secondary" %>
-      <% end %>
+      <div class="bg-white p-4 rounded shadow-sm border">
+        <h2 class="mb-4 text-center fw-bold">Créer une nouvelle liste</h2>
+
+        <%= simple_form_for(@list) do |f| %>
+          <%= f.input :name,
+              label: "Nom de la liste",
+              placeholder: "Ex: Classiques, Horreur, Comédies...",
+              input_html: { class: "mb-3" } %>
+
+          <%= f.input :photo,
+              as: :file,
+              label: "Image de couverture",
+              input_html: { class: "mb-3" } %>
+
+          <%= f.submit "Créer la liste", class: "btn btn-success w-100 rounded-pill mt-3" %>
+        <% end %>
+
+        <div class="text-center mt-3">
+          <%= link_to "Annuler", lists_path, class: "text-secondary text-decoration-none small" %>
+        </div>
+
+      </div>
+
     </div>
   </div>
 </div>

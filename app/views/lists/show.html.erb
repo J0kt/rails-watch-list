@@ -1,4 +1,10 @@
-<div class="banner position-relative" style="background-image: linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)), url(https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200);">
+<% if @list.photo.attached? %>
+  <% background_url = cl_image_path @list.photo.key, width: 1200, height: 400, crop: :fill %>
+<% else %>
+  <% background_url = "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200" %>
+<% end %>
+
+<div class="banner position-relative" style="background-image: linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)), url('<%= background_url %>');">
   <div class="container text-center">
     <h1 class="text-white fw-bold display-3"><%= @list.name %></h1>
   </div>
@@ -16,6 +22,15 @@
   </div>
 
   <div class="row g-4">
+    <% if @list.bookmarks.empty? %>
+      <div class="col-12">
+        <div class="alert alert-light text-center py-5">
+          <h4>Cette liste est vide 🍿</h4>
+          <p>Cliquez sur "add a movie" pour commencer votre collection !</p>
+        </div>
+      </div>
+    <% end %>
+
     <% @list.bookmarks.each do |bookmark| %>
       <div class="col-12 col-md-6">
         <div class="card h-100 shadow-sm border-0 overflow-hidden">
@@ -30,7 +45,7 @@
 
           <div class="card-body d-flex flex-column p-4">
             <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="card-title fw-bold mb-0"><%= bookmark.movie.title %></h5>
+              <h5 class="card-title fw-bold mb-0 text-truncate" style="max-width: 85%;"><%= bookmark.movie.title %></h5>
               <div class="d-flex align-items-center">
                  <span class="me-1"><%= bookmark.movie.rating %></span> <i class="fas fa-star text-warning"></i>
               </div>
@@ -64,11 +79,17 @@
       <h3 class="text-center mb-4">Avis sur cette liste</h3>
 
       <div class="bg-light p-4 rounded mb-4">
+        <% if @list.reviews.empty? %>
+          <p class="text-muted text-center mb-0">Soyez le premier à donner votre avis sur cette liste !</p>
+        <% end %>
+
         <% @list.reviews.each do |review| %>
           <div class="mb-3 border-bottom pb-2">
-             <% review.rating.times do %><i class="fas fa-star text-warning small"></i><% end %>
-             <span class="ms-2 text-muted small"><%= time_ago_in_words(review.created_at) %> ago</span>
-             <p class="mb-0 mt-1"><%= review.comment %></p>
+             <div class="mb-1">
+               <% review.rating.times do %><i class="fas fa-star text-warning small"></i><% end %>
+               <span class="ms-2 text-muted small"><%= time_ago_in_words(review.created_at) %> ago</span>
+             </div>
+             <p class="mb-0 text-dark"><%= review.comment %></p>
           </div>
         <% end %>
       </div>
@@ -85,7 +106,10 @@
   </div>
 
   <div class="text-center mt-5">
-      <%= link_to "Supprimer cette liste", list_path(@list), class: "text-danger text-decoration-none small", data: { turbo_method: :delete, turbo_confirm: "Sûr ?" } %>
+    <%= button_to "Supprimer cette liste", list_path(@list),
+        method: :delete,
+        form: { data: { turbo_confirm: "Êtes-vous sûr de vouloir tout supprimer ?" } },
+        class: "btn btn-link text-danger text-decoration-none small" %>
   </div>
 
 </div>

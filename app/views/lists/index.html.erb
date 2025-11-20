@@ -8,8 +8,8 @@
 <div class="container py-5">
 
   <div class="d-flex align-items-center justify-content-between mb-4">
-    <h3 class="mb-0 fw-bold">My Lists</h3>
-    <%= link_to "Create a movie list", new_list_path, class: "btn btn-success rounded-pill px-4" %>
+    <h3 class="mb-0 fw-bold">Mes Listes</h3>
+    <%= link_to "Nouvelle liste", new_list_path, class: "btn btn-success rounded-pill px-4" %>
   </div>
 
   <div class="row g-4">
@@ -18,7 +18,7 @@
 
         <%= link_to list_path(list), class: "text-decoration-none" do %>
 
-          <% if list.respond_to?(:photo) && list.photo.attached? %>
+          <% if list.photo.attached? %>
             <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= cl_image_path list.photo.key, height: 400, width: 600, crop: :fill %>')">
               <%= list.name %>
             </div>
