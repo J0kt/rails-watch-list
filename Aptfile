@@ -1,0 +1,3 @@
+# Aptfile
+# Dépendances nécessaires pour le traitement d'images sur Heroku
+libvips
