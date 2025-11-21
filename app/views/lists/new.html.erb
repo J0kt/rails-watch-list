@@ -8,13 +8,11 @@
         <%= simple_form_for(@list) do |f| %>
           <%= f.input :name,
               label: "Nom de la liste",
-              placeholder: "Ex: Classiques, Horreur, Comédies...",
-              input_html: { class: "mb-3" } %>
+              placeholder: "Ex: Classiques, Horreur, Comédies..." %>
 
           <%= f.input :photo,
               as: :file,
-              label: "Image de couverture",
-              input_html: { class: "mb-3" } %>
+              label: "Image de couverture" %>
 
           <%= f.submit "Créer la liste", class: "btn btn-success w-100 rounded-pill mt-3" %>
         <% end %>

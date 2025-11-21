@@ -9,7 +9,7 @@
     <h1 class="text-white fw-bold display-3"><%= @list.name %></h1>
   </div>
   <span class="badge bg-warning text-dark fs-6 position-absolute top-0 end-0 m-3 rounded-pill px-3 py-2">
-    <%= @list.movies.count %> movies
+    <%= @list.movies.count %> films
   </span>
 </div>
 
@@ -17,7 +17,7 @@
 
   <div class="d-flex justify-content-end mb-4">
     <button type="button" class="btn btn-success rounded-1 px-4" data-bs-toggle="modal" data-bs-target="#newMovieModal">
-      add a movie
+      Ajouter un film
     </button>
   </div>
 
@@ -26,7 +26,7 @@
       <div class="col-12">
         <div class="alert alert-light text-center py-5">
           <h4>Cette liste est vide 🍿</h4>
-          <p>Cliquez sur "add a movie" pour commencer votre collection !</p>
+          <p>Cliquez sur "Ajouter un film" pour commencer votre collection !</p>
         </div>
       </div>
     <% end %>
@@ -61,8 +61,8 @@
                 <%= bookmark.comment %>
               </div>
 
-              <%= link_to "delete", bookmark_path(bookmark),
-                  data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
+              <%= link_to "Supprimer", bookmark_path(bookmark),
+                  data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce film de la liste ?" },
                   class: "text-danger text-decoration-none small fw-bold" %>
             </div>
           </div>
@@ -87,7 +87,7 @@
           <div class="mb-3 border-bottom pb-2">
              <div class="mb-1">
                <% review.rating.times do %><i class="fas fa-star text-warning small"></i><% end %>
-               <span class="ms-2 text-muted small"><%= time_ago_in_words(review.created_at) %> ago</span>
+               <span class="ms-2 text-muted small"><%= time_ago_in_words(review.created_at) %> il y a</span>
              </div>
              <p class="mb-0 text-dark"><%= review.comment %></p>
           </div>
