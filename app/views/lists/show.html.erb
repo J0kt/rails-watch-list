@@ -1,7 +1,5 @@
-<%# Bloc de définition de l'URL d'arrière-plan %>
 <% if @list.photo.attached? %>
-  <%# CORRECTION : Utilisation de url_for avec variant pour Active Storage/Cloudinary %>
-  <% background_url = url_for @list.photo.variant(resize_to_fill: [1200, 400]) %>
+  <% background_url = rails_blob_url @list.photo.variant(resize_to_fill: [1200, 400]), only_path: false %>
 <% else %>
   <% background_url = "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200" %>
 <% end %>
