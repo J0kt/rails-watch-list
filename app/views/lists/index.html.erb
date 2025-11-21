@@ -16,14 +16,16 @@
     <% @lists.each do |list| %>
       <div class="col-12 col-sm-6 col-lg-4">
 
-        <%= link_to list_path(list), class: "text-decoration-none" do %>
+        <%= link_to list_path(list), class: "text-decoration-none card-link" do %>
 
+          <%# CORRECTION : Utilisation de url_for avec variant pour Active Storage/Cloudinary %>
           <% if list.photo.attached? %>
-            <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= cl_image_path list.photo.key, height: 400, width: 600, crop: :fill %>')">
+            <div class="card-category shadow" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= url_for list.photo.variant(resize_to_fill: [400, 250]) %>')">
               <%= list.name %>
             </div>
           <% else %>
-            <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://picsum.photos/seed/<%= list.id %>/800/600')">
+            <%# Image par défaut si aucune photo n'est chargée %>
+            <div class="card-category shadow" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://picsum.photos/seed/<%= list.id %>/800/600')">
               <%= list.name %>
             </div>
           <% end %>

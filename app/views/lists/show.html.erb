@@ -1,5 +1,7 @@
+<%# Bloc de définition de l'URL d'arrière-plan %>
 <% if @list.photo.attached? %>
-  <% background_url = cl_image_path @list.photo.key, width: 1200, height: 400, crop: :fill %>
+  <%# CORRECTION : Utilisation de url_for avec variant pour Active Storage/Cloudinary %>
+  <% background_url = url_for @list.photo.variant(resize_to_fill: [1200, 400]) %>
 <% else %>
   <% background_url = "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200" %>
 <% end %>
