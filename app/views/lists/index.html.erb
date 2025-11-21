@@ -18,14 +18,17 @@
 
         <%= link_to list_path(list), class: "text-decoration-none card-link" do %>
 
-          <%# CORRECTION : Utilisation de url_for avec variant pour Active Storage/Cloudinary %>
+          <%# Affichage de l'image uploadée (Active Storage/Cloudinary) ou de l'image de secours %>
           <% if list.photo.attached? %>
             <div class="card-category shadow" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= url_for list.photo.variant(resize_to_fill: [400, 250]) %>')">
               <%= list.name %>
             </div>
           <% else %>
-            <%# Image par défaut si aucune photo n'est chargée %>
-            <div class="card-category shadow" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://picsum.photos/seed/<%= list.id %>/800/600')">
+            <%# Image par défaut pour les listes sans photo attachée %>
+            <div class="card-category shadow" style="
+              background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://picsum.photos/seed/<%= list.id %>/800/600');
+              min-height: 200px; /* GARANTIT LA HAUTEUR DE LA CARTE */
+              ">
               <%= list.name %>
             </div>
           <% end %>
