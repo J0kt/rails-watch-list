@@ -1,133 +1,41 @@
-<% if @list.photo.attached? %>
-  <% background_url = rails_blob_url @list.photo.variant(resize_to_fill: [1200, 400]), only_path: false %>
-<% else %>
-  <% background_url = "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200" %>
-<% end %>
-
-<div class="banner position-relative" style="background-image: linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)), url('<%= background_url %>');">
+<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200);">
   <div class="container text-center">
-    <h1 class="text-white fw-bold display-3"><%= @list.name %></h1>
+    <h1 class="text-white fw-bold display-4">Save any kind of movies</h1>
+    <h3 class="text-white fw-light mt-3 opacity-75">Classic, Horror, Romance...</h3>
   </div>
-  <span class="badge bg-warning text-dark fs-6 position-absolute top-0 end-0 m-3 rounded-pill px-3 py-2">
-    <%= @list.movies.count %> films
-  </span>
 </div>
 
-<div class="container my-5">
+<div class="container py-5">
 
-  <div class="d-flex justify-content-end mb-4">
-    <button type="button" class="btn btn-success rounded-1 px-4" data-bs-toggle="modal" data-bs-target="#newMovieModal">
-      Ajouter un film
-    </button>
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h3 class="mb-0 fw-bold">Mes Listes</h3>
+    <%= link_to "Nouvelle liste", new_list_path, class: "btn btn-success rounded-pill px-4" %>
   </div>
 
   <div class="row g-4">
-    <% if @list.bookmarks.empty? %>
-      <div class="col-12">
-        <div class="alert alert-light text-center py-5">
-          <h4>Cette liste est vide 🍿</h4>
-          <p>Cliquez sur "Ajouter un film" pour commencer votre collection !</p>
-        </div>
+    <% @lists.each do |list| %>
+      <div class="col-12 col-sm-6 col-lg-4">
+
+        <%= link_to list_path(list), class: "text-decoration-none card-link" do %>
+
+          <%# Affichage de l'image uploadée (Active Storage/Cloudinary) ou de l'image de secours %>
+          <% if list.photo.attached? %>
+            <div class="card-category shadow" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= rails_blob_url list.photo.variant(resize_to_fill: [400, 250]), only_path: false %>')">
+              <%= list.name %>
+            </div>
+          <% else %>
+            <%# Image par défaut pour les listes sans photo attachée %>
+            <div class="card-category shadow" style="
+              background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200');
+              min-height: 200px;
+              ">
+              <%= list.name %>
+            </div>
+          <% end %>
+
+        <% end %>
+
       </div>
     <% end %>
-
-    <% @list.bookmarks.each do |bookmark| %>
-      <div class="col-12 col-md-6">
-        <div class="card h-100 shadow-sm border-0 overflow-hidden">
-
-          <div style="height: 250px; overflow: hidden;">
-            <% if bookmark.movie.poster_url.present? %>
-              <%= image_tag bookmark.movie.poster_url, class: "w-100 h-100 object-fit-cover" %>
-            <% else %>
-              <img src="https://via.placeholder.com/500x300?text=No+Image" class="w-100 h-100 object-fit-cover">
-            <% end %>
-          </div>
-
-          <div class="card-body d-flex flex-column p-4">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="card-title fw-bold mb-0 text-truncate" style="max-width: 85%;"><%= bookmark.movie.title %></h5>
-              <div class="d-flex justify-content-between align-items-center">
-                 <span class="me-1"><%= bookmark.movie.rating %></span> <i class="fas fa-star text-warning"></i>
-              </div>
-            </div>
-
-            <p class="card-text text-muted small flex-grow-1">
-              <%= bookmark.movie.overview.truncate(150) %>
-            </p>
-
-            <div class="d-flex justify-content-between align-items-end mt-3 pt-3 border-top">
-              <div class="d-flex align-items-center text-dark small fst-italic">
-                <i class="fas fa-quote-left me-2 text-muted fs-4"></i>
-                <%= bookmark.comment %>
-              </div>
-
-              <%= link_to "Supprimer", bookmark_path(bookmark),
-                  data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce film de la liste ?" },
-                  class: "text-danger text-decoration-none small fw-bold" %>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    <% end %>
-  </div>
-
-  <hr class="my-5">
-
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <h3 class="text-center mb-4">Avis sur cette liste</h3>
-
-      <div class="bg-light p-4 rounded mb-4">
-        <% if @list.reviews.empty? %>
-          <p class="text-muted text-center mb-0">Soyez le premier à donner votre avis sur cette liste !</p>
-        <% end %>
-
-        <% @list.reviews.each do |review| %>
-          <div class="mb-3 border-bottom pb-2">
-             <div class="mb-1">
-               <% review.rating.times do %><i class="fas fa-star text-warning small"></i><% end %>
-               <span class="ms-2 text-muted small"><%= time_ago_in_words(review.created_at) %> il y a</span>
-             </div>
-             <p class="mb-0 text-dark"><%= review.comment %></p>
-          </div>
-        <% end %>
-      </div>
-
-      <div class="bg-white border p-4 rounded shadow-sm">
-        <h5>Laisser un avis</h5>
-        <%= simple_form_for [@list, @review] do |f| %>
-          <%= f.input :rating, collection: 1..5, as: :radio_buttons, item_wrapper_class: 'form-check-inline', label: false %>
-          <%= f.input :comment, placeholder: "Votre avis...", label: false, input_html: { rows: 2 } %>
-          <%= f.submit "Publier", class: "btn btn-dark btn-sm" %>
-        <% end %>
-      </div>
-    </div>
-  </div>
-
-  <div class="text-center mt-5">
-    <%= button_to "Supprimer cette liste", list_path(@list),
-        method: :delete,
-        form: { data: { turbo_confirm: "Êtes-vous sûr de vouloir tout supprimer ?" } },
-        class: "btn btn-link text-danger text-decoration-none small" %>
-  </div>
-
-</div>
-
-<div class="modal fade" id="newMovieModal" tabindex="-1" aria-labelledby="newMovieModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="newMovieModalLabel">Ajouter un film à la liste</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <%= simple_form_for [@list, @bookmark] do |f| %>
-          <%= f.association :movie, collection: Movie.all.order(:title), prompt: "Rechercher un film...", input_html: { class: "form-select mb-3" } %>
-          <%= f.input :comment, placeholder: "Pourquoi ce film est-il génial ?", input_html: { rows: 3 } %>
-          <%= f.submit "Ajouter le film", class: "btn btn-success w-100" %>
-        <% end %>
-      </div>
-    </div>
   </div>
 </div>
