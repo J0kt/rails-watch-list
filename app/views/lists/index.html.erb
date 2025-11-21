@@ -18,16 +18,14 @@
 
         <%= link_to list_path(list), class: "text-decoration-none card-link" do %>
 
-          <%# Affichage de l'image uploadée (Active Storage/Cloudinary) ou de l'image de secours %>
           <% if list.photo.attached? %>
-            <div class="card-category shadow" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= url_for list.photo.variant(resize_to_fill: [400, 250]) %>')">
+            <div class="card-category shadow" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= rails_blob_url list.photo.variant(resize_to_fill: [400, 250]), only_path: false %>')">
               <%= list.name %>
             </div>
           <% else %>
-            <%# Image par défaut pour les listes sans photo attachée %>
             <div class="card-category shadow" style="
-              background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://picsum.photos/seed/<%= list.id %>/800/600');
-              min-height: 200px; /* GARANTIT LA HAUTEUR DE LA CARTE */
+              background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200');
+              min-height: 200px;
               ">
               <%= list.name %>
             </div>
